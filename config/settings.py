@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+from django.core.exceptions import ImproperlyConfigured
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -17,6 +19,9 @@ VERSION = "0.1.0"
 SECRET_KEY = env_str("DJANGO_SECRET_KEY", "change-me-in-production")
 DEBUG = env_bool("DJANGO_DEBUG", False)
 ALLOWED_HOSTS = [h.strip() for h in env_str("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")]
+
+if not DEBUG and SECRET_KEY == "change-me-in-production":
+    raise ImproperlyConfigured("DJANGO_SECRET_KEY must be set to a unique, unpredictable value in production.")
 
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
@@ -68,6 +73,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": env_str("POSTGRES_DB", "boilerworks_micro"),
         "USER": env_str("POSTGRES_USER", "dbadmin"),
+        # Dev-only default. Override POSTGRES_PASSWORD via environment in production.
         "PASSWORD": env_str("POSTGRES_PASSWORD", "Password123"),
         "HOST": env_str("POSTGRES_HOST", "localhost"),
         "PORT": env_str("POSTGRES_PORT", "5432"),

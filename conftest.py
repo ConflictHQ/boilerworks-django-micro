@@ -18,14 +18,6 @@ def api_key(db, raw_api_key):
 
 
 @pytest.fixture
-def scoped_api_key(db):
-    raw = "scoped-key-xyz"
-    key_hash = hashlib.sha256(raw.encode()).hexdigest()
-    key = ApiKey.objects.create(name="scoped-key", key_hash=key_hash, scopes=["webhooks.read"])
-    return key, raw
-
-
-@pytest.fixture
 def api_client(api_key, raw_api_key):
     client = APIClient()
     client.credentials(HTTP_X_API_KEY=raw_api_key)

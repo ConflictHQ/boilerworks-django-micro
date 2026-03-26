@@ -1,4 +1,7 @@
+from django.utils.decorators import method_decorator
+from django_ratelimit.decorators import ratelimit
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from api.auth import require_scope
@@ -9,6 +12,7 @@ from .serializers import WebhookEventOutSerializer, WebhookPayloadSerializer
 
 
 class WebhookReceiveView(APIView):
+    @method_decorator(ratelimit(key="ip", rate="30/m", block=True))
     def post(self, request):
         """Receive and store a webhook event."""
         serializer = WebhookPayloadSerializer(data=request.data)
@@ -31,6 +35,11 @@ class WebhookListView(APIView):
 
 
 class WebhookDetailView(APIView):
+    def get_permissions(self):
+        if self.request.method == "DELETE":
+            return [IsAuthenticated(), require_scope("webhooks.delete")()]
+        return super().get_permissions()
+
     def get(self, request, guid):
         """Get a specific webhook event by GUID."""
         try:
@@ -41,10 +50,6 @@ class WebhookDetailView(APIView):
 
     def delete(self, request, guid):
         """Soft-delete a webhook event. Requires webhooks.delete scope."""
-        permission = require_scope("webhooks.delete")()
-        if not permission.has_permission(request, self):
-            return api_response(ok=False, errors=[{"detail": "Missing scope: webhooks.delete"}], http_status=403)
-
         try:
             event = WebhookEvent.objects.get(guid=guid)
         except WebhookEvent.DoesNotExist:

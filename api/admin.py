@@ -1,6 +1,3 @@
-import hashlib
-import secrets
-
 from django.contrib import admin, messages
 
 from .models import ApiKey
@@ -15,9 +12,8 @@ class ApiKeyAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if not change:
-            raw_key = secrets.token_urlsafe(32)
-            obj.key_hash = hashlib.sha256(raw_key.encode()).hexdigest()
-            super().save_model(request, obj, form, change)
+            api_key, raw_key = ApiKey.generate(name=obj.name, scopes=obj.scopes or ["*"])
             messages.info(request, f"API Key (copy now, shown once): {raw_key}")
-        else:
-            super().save_model(request, obj, form, change)
+            # Don't call super — generate() already saved
+            return
+        super().save_model(request, obj, form, change)

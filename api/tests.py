@@ -73,17 +73,18 @@ class TestApiKeyEndpoints:
         response = api_client.delete(reverse("api-key-revoke", kwargs={"guid": uuid.uuid4()}))
         assert response.status_code == 404
 
-    def test_no_auth_returns_401(self, anon_client):
+    def test_no_auth_returns_403(self, anon_client):
         response = anon_client.get(reverse("api-keys"))
-        assert response.status_code in (401, 403)
+        assert response.status_code == 403
 
-    def test_invalid_key_returns_401(self):
+    def test_invalid_key_returns_403(self):
+        """DRF coerces AuthenticationFailed to 403 when no WWW-Authenticate header is set."""
         from rest_framework.test import APIClient
 
         client = APIClient()
         client.credentials(HTTP_X_API_KEY="bad-key")
         response = client.get(reverse("api-keys"))
-        assert response.status_code in (401, 403)
+        assert response.status_code == 403
 
 
 @pytest.mark.django_db

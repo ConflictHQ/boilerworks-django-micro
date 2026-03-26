@@ -33,7 +33,7 @@ class TestWebhookReceive:
             {"event": "order.created", "data": {}},
             format="json",
         )
-        assert response.status_code in (401, 403)
+        assert response.status_code == 403
 
     def test_receive_webhook_invalid_payload(self, api_client):
         response = api_client.post(reverse("webhook-receive"), {"bad": "data"}, format="json")
