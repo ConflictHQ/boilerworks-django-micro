@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+from django_ratelimit.decorators import ratelimit
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,6 +19,7 @@ class ApiKeyListCreateView(APIView):
         serializer = ApiKeyOutSerializer(keys, many=True)
         return api_response(ok=True, data=serializer.data)
 
+    @method_decorator(ratelimit(key="ip", rate="10/m", block=True))
     def post(self, request):
         """Create a new API key. The raw key is returned once."""
         serializer = ApiKeyCreateSerializer(data=request.data)

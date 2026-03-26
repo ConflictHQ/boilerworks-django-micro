@@ -73,8 +73,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": env_str("POSTGRES_DB", "boilerworks_micro"),
         "USER": env_str("POSTGRES_USER", "dbadmin"),
-        # Dev-only default. Override POSTGRES_PASSWORD via environment in production.
-        "PASSWORD": env_str("POSTGRES_PASSWORD", "Password123"),
+        "PASSWORD": env_str("POSTGRES_PASSWORD", "Password123"),  # DEV ONLY — never use in production
         "HOST": env_str("POSTGRES_HOST", "localhost"),
         "PORT": env_str("POSTGRES_PORT", "5432"),
     }
