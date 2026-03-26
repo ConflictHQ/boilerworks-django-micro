@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.http import JsonResponse
 from django.urls import include, path
 
+from config.views import root_view
+
 admin.site.site_header = "Boilerworks Micro"
 admin.site.site_title = "Boilerworks Micro Admin"
 
@@ -18,6 +20,7 @@ def health_check(request):
 
 
 urlpatterns = [
+    path("", root_view, name="root"),
     path("health/", health_check, name="health"),
     path("api/", include("api.urls")),
     path("api/webhooks/", include("webhooks.urls")),
