@@ -1,0 +1,59 @@
+[project]
+name = "boilerworks-django-micro"
+version = "0.1.0"
+description = "Boilerworks Django micro template — API-only service with API-key auth"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.1,<6.0",
+    "djangorestframework>=3.15",
+    "psycopg2-binary>=2.9",
+    "redis>=5.0",
+    "django-ratelimit>=4.1",
+    "django-cors-headers>=4.4",
+    "gunicorn>=23.0",
+    "whitenoise>=6.7",
+    "sentry-sdk[django]>=2.14",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.7",
+    "pytest>=8.3",
+    "pytest-django>=4.9",
+    "pytest-cov>=5.0",
+    "coverage>=7.6",
+    "pip-audit>=2.7",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B", "SIM", "N"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["config", "api", "webhooks"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+python_files = ["tests.py", "test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+
+[tool.coverage.run]
+source = ["api", "webhooks"]
+omit = ["*/migrations/*", "*/tests/*", "manage.py"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.backends"

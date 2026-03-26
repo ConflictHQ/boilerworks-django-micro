@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff
+      - run: ruff check .
+      - run: ruff format --check .
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: boilerworks_micro_test
+          POSTGRES_USER: dbadmin
+          POSTGRES_PASSWORD: Password123
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U dbadmin -d boilerworks_micro_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+    env:
+      DJANGO_SECRET_KEY: test-secret
+      DJANGO_DEBUG: "true"
+      POSTGRES_DB: boilerworks_micro_test
+      POSTGRES_USER: dbadmin
+      POSTGRES_PASSWORD: Password123
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+      REDIS_URL: redis://localhost:6379/1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install uv && uv pip install --system -r pyproject.toml && uv pip install --system ".[dev]"
+      - run: python manage.py migrate --noinput
+      - run: python -m pytest --cov --cov-report=term-missing --cov-fail-under=80 -v
