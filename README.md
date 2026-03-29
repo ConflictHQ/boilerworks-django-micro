@@ -21,10 +21,10 @@ docker compose exec api python manage.py migrate
 docker compose exec api python manage.py createsuperuser
 
 # Create an API key via admin
-open http://localhost:8002/admin/
+open http://localhost:8000/admin/
 
 # Test the API
-curl -H "X-API-Key: <your-key>" http://localhost:8002/api/keys/
+curl -H "X-API-Key: <your-key>" http://localhost:8000/api/keys/
 ```
 
 ## Endpoints

@@ -82,11 +82,11 @@ def test_my_endpoint(api_client):
 
 | Service | URL |
 |---|---|
-| API | http://localhost:8002 |
-| Admin | http://localhost:8002/admin/ |
-| Health | http://localhost:8002/health/ |
-| Postgres | localhost:5435 |
-| Redis | localhost:6382 |
+| API | http://localhost:8000 |
+| Admin | http://localhost:8000/admin/ |
+| Health | http://localhost:8000/health/ |
+| Postgres | localhost:5432 |
+| Redis | localhost:6379 |
 
 ---
 
