@@ -49,3 +49,7 @@ Key patterns:
 - API-key auth on every endpoint, per-key scopes
 - All responses wrapped in `ApiResponse` format: `{ok, data, errors}`
 - Tests against real Postgres via DRF `APIClient`
+
+---
+
+Boilerworks is a [Conflict](https://weareconflict.com) brand. CONFLICT is a registered trademark of Conflict LLC.
