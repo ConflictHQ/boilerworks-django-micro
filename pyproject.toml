@@ -12,7 +12,7 @@ dependencies = [
     "django-cors-headers>=4.4",
     "gunicorn>=23.0",
     "whitenoise>=6.7",
-    "sentry-sdk[django]>=2.14",
+    "sentry-sdk[django]>=2.57.0",
 ]
 
 [project.optional-dependencies]
