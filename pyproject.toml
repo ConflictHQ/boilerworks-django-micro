@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Boilerworks Django micro template — API-only service with API-key auth"
 requires-python = ">=3.12"
 dependencies = [
-    "django>=5.1,<6.0",
+    "django>=6.0.4,<7.0",
     "djangorestframework>=3.15",
     "psycopg2-binary>=2.9",
     "redis>=5.0",
