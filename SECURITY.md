@@ -23,11 +23,12 @@ We will acknowledge your report within 48 hours and aim to release a fix within 
 
 ## Security Best Practices
 
-When deploying Boilerworks:
+When deploying Boilerworks Django Micro:
 
-- Change all default credentials (database, MinIO, session secret)
+- Set `DJANGO_SECRET_KEY` to a unique, unpredictable value (the app refuses to start in production with the default)
+- Set `DJANGO_DEBUG=false` in production
+- Restrict `DJANGO_ALLOWED_HOSTS` to your domain(s) only
+- Configure `CORS_ALLOWED_ORIGINS` to your domain only, and keep `CORS_ALLOW_ALL_ORIGINS=false`
+- Change the default Postgres credentials (`POSTGRES_USER` / `POSTGRES_PASSWORD`)
 - Use HTTPS in production
-- Set `NODE_ENV=production`
-- Configure `CORS_ORIGINS` to your domain only
-- Use strong Auth0 credentials
-- Review the security hardening in `bootstrap.md`
+- Never commit `.env` — use `.env.example` as the reference

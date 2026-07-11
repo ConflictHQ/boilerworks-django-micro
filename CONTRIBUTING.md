@@ -1,4 +1,4 @@
-# Contributing to Boilerworks django + micro
+# Contributing to Boilerworks Django Micro
 
 Thank you for your interest in contributing!
 
