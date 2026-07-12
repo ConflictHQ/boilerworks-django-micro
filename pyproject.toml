@@ -5,7 +5,7 @@ description = "Boilerworks Django micro template — API-only service with API-k
 requires-python = ">=3.12"
 dependencies = [
     "django>=5.1,<6.0",
-    "djangorestframework>=3.15",
+    "djangorestframework>=3.17.1",
     "psycopg2-binary>=2.9",
     "redis>=5.0",
     "django-ratelimit>=4.1",
